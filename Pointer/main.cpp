@@ -1,14 +1,36 @@
-//
-//  main.cpp
-//  Pointer
-//
-//  Created by Варя Мінєнкова on 05.12.2024.
-//
-
 #include <iostream>
+#include "SmartPointers.h"
+using namespace std;
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+struct Test 
+{
+    int value;
+    Test(int v) : value(v) { cout << "Test object created"<<endl; }
+    ~Test() { cout << "Test object destroyed"<<endl; }
+    void display() { cout << "Value: " << value << endl; }
+};
+
+int main() 
+{
+    cout << "Testing UniquePtr:\n";
+    UniquePtr<Test> uptr(new Test(10));
+    uptr->display();
+
+    UniquePtr<Test> uptr2 = move(uptr);
+    if (!uptr)
+    {
+        cout << "uptr is now empty"<<endl;
+    }
+    uptr2->display();
+
+    cout << "\nTesting SharedPtr:\n";
+    SharedPtr<Test> sptr1(new Test(20));
+    {
+        SharedPtr<Test> sptr2 = sptr1;
+        sptr2->display();
+        cout << "End of inner scope\n";
+    }
+    sptr1->display();
+
     return 0;
 }
